@@ -1,18 +1,16 @@
 require 'fileutils'
 require 'securerandom'
 
-task :echo do
-  puts 'echo'
-end
+JOTS_DIR = "#{__dir__}/jots"
+directory JOTS_DIR
 
 namespace :jots do
-  desc 'Define operations of jots'
-
+  desc 'Create a new jot with the file extension'
   task :new, ['ext'] do |_, args|
     extension = args.ext || 'txt'
     today = Time.now.strftime('%Y%m%d')
     file_name = "#{extension}-#{today}-#{SecureRandom.hex(10)}.#{extension}"
-    path = "#{__dir__}/jots/#{file_name}"
+    path = "#{JOTS_DIR}/#{file_name}"
 
     puts "Create file: #{file_name}"
     File.new path, 'w'
@@ -23,6 +21,7 @@ namespace :jots do
     system "code #{path}"
   end
 
+  desc 'Delete jots by some condition'
   task :rm, %w[file exts] do |_, args|
     file = args.file
     extension = args.exts
